@@ -6,18 +6,15 @@ use Drupal\Core\Controller\ControllerBase;
 
 class GreetingController extends ControllerBase {
 
-  public function greeting($to, $from) {
-    $message = $this->t('%from sends a greeting to %to', [
-      '%from' => $from,
-      '%to' => $to,
-    ]);
-
-    return ['#markup' => $message];
-  }
-
-  public function test() {
-    return array(
-      '#markup' => t('Hello World!'),
-    );
+  public function greeting($to, $from, $count) {
+    if (!$count) {
+      $count = $this->config('greeting.settings')->get('default_count');
+    }
+    return [
+      '#theme' => 'greeting_page',
+      '#from' => $from,
+      '#to' => $to,
+      '#count' => $count,
+    ];
   }
 }

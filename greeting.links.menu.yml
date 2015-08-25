@@ -1,0 +1,5 @@
+greeting.config:
+  title: 'Greeting configuration'
+  description: 'Configure the greeting system'
+  route_name: greeting.config
+  parent: system.admin_config_system

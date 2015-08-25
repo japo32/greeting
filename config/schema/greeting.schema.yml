@@ -1,0 +1,7 @@
+greeting.settings:
+  type: mapping
+  label: 'Greeting module settings'
+  mapping:
+    default_count:
+      type: integer
+      label: 'Default greeting count'

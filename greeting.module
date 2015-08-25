@@ -1,0 +1,10 @@
+<?php
+
+function greeting_theme() {
+  $theme['greeting_page'] = [
+    'variables' => ['from' => NULL, 'to' => NULL, 'count' => NULL],
+    'template' => 'greeting_page',
+  ];
+
+  return $theme;
+}

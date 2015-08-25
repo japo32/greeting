@@ -1,0 +1,3 @@
+configure_greeting:
+  title: 'Configure the greeting system'
+  description: 'Configure the default greeting count'
