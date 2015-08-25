@@ -1,0 +1,5 @@
+name: Greeting
+description: A greeting page
+core: 8.x
+type: module
+version: 8.x-dev

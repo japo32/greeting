@@ -1,0 +1,7 @@
+greeting.greeting:
+  path: '/greeting/{from}/{to}'
+  defaults:
+    _controller: 'Drupal\greeting\Controller\GreetingController::greeting'
+    _title: 'Greeting!'
+  requirements:
+    _permission: 'access content'
