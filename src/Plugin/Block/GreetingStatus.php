@@ -68,7 +68,7 @@ class GreetingStatus extends BlockBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['greeting'] = t($form_state->getValue('greeting'));
+    $this->configuration['greeting'] = t('@greeting', array('@greeting' => $form_state->getValue('greeting')));
     $this->configuration['enabled'] = (bool)$form_state->getValue('enabled');
   }
 
@@ -81,7 +81,7 @@ class GreetingStatus extends BlockBase implements ContainerFactoryPluginInterfac
       $message = $this->t('@to was the last person greeted.', [
         '@to' => $this->greetingTracker->getLastRecipient()
       ]);
-      $message .= "</br>".SafeMarkup::checkPlain($this->configuration['greeting']);
+      $message .= t('</br> @greeting', array('@greeting' => $this->configuration['greeting']));
     }
     return ['#markup' => $message];
   }
