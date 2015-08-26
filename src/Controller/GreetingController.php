@@ -36,12 +36,12 @@ class GreetingController extends ControllerBase {
         $terms[] = $tag->entity->label();
       }
 
-      $message = $this->t('Everyone greet @name because @reasons!', [
-        '@name' => $node->getOwner()->label(), '@reasons' => implode(', ', $terms),
-      ]);
       return [
+        '#theme' => 'greeting_node',
         '#title' => $node->label() . ' (' . $node->bundle() . ')',
-        '#markup' => $message . $formatted,
+        '#body' => $formatted,
+        '#name' => $node->getOwner()->label(),
+        '#terms' => $terms
       ];
     }
     return ['#markup' => $this->t('Not published')];

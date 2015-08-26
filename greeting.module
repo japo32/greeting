@@ -5,6 +5,10 @@ function greeting_theme() {
     'variables' => ['from' => NULL, 'to' => NULL, 'count' => NULL],
     'template' => 'greeting_page',
   ];
+  $theme['greeting_node'] = [
+    'variables' => ['body' => NULL, 'name' => NULL, 'tags' => NULL],
+    'template' => 'greeting_node',
+  ];
 
   return $theme;
 }
