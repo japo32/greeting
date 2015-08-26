@@ -4,6 +4,7 @@ namespace Drupal\greeting\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Reports on greetability status
@@ -27,10 +28,10 @@ class GreetingStatus extends BlockBase {
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $form['enabled'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Greeting enabled'),
-      '#default_value' => $this->configuration['enabled'],
+    $form['greeting'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Greeting text'),
+      '#default_value' => $this->configuration['greeting'],
     );
     return $form;
   }
@@ -39,17 +40,13 @@ class GreetingStatus extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['enabled'] =  $form_state->getValue('enabled');
+    $this->configuration['greeting'] =  t($form_state->getValue('greeting'));
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    $message = $this->configuration['enabled']
-      ? $this->t('Now accepting greetings')
-      : $this->t('No greetings :-(');
-
-    return ['#markup' => $message];
+    return ['#markup' => SafeMarkup::checkPlain($this->configuration['greeting'])];
   }
 }
