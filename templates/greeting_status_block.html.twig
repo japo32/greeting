@@ -1,0 +1,10 @@
+{% if enabled == true %}
+  {% trans %}
+    {{ to }} was the last person greeted. </br>
+    {{ greeting }}
+  {% endtrans %}
+{% else %}
+  {% trans %}
+    No greetings.
+  {% endtrans %}
+{% endif %}

@@ -9,6 +9,10 @@ function greeting_theme() {
     'variables' => ['body' => NULL, 'name' => NULL, 'tags' => NULL],
     'template' => 'greeting_node',
   ];
+  $theme['greeting_status_block'] = [
+    'variables' => ['enabled' => NULL, 'to' => NULL, 'greeting' => NULL],
+    'template' => 'greeting_status_block',
+  ];
 
   return $theme;
 }

@@ -76,13 +76,11 @@ class GreetingStatus extends BlockBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function build() {
-    $message = $this->t('No greetings.');
-    if ($this->configuration['enabled']) {
-      $message = $this->t('@to was the last person greeted.', [
-        '@to' => $this->greetingTracker->getLastRecipient()
-      ]);
-      $message .= t('</br> @greeting', array('@greeting' => $this->configuration['greeting']));
-    }
-    return ['#markup' => $message];
+    return array(
+      '#theme' => 'greeting_status_block',
+      '#enabled' => (bool)$this->configuration['enabled'],
+      '#to' => $this->greetingTracker->getLastRecipient(),
+      '#greeting' => $this->configuration['greeting']
+    );
   }
 }
