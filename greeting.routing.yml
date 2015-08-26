@@ -15,3 +15,10 @@ greeting.config:
     _title: 'Greeting configuration'
   requirements:
     _permission: 'configure greeting'
+
+greeting.node:
+  path: '/node/{node}/greeting'
+  defaults:
+    _controller: 'Drupal\greeting\Controller\GreetingController::nodeGreeting'
+  requirements:
+    _permission: 'access content'

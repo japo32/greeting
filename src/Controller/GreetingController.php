@@ -4,6 +4,7 @@ namespace Drupal\greeting\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\greeting\GreetingTracker;
+use \Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class GreetingController extends ControllerBase {
@@ -25,5 +26,24 @@ class GreetingController extends ControllerBase {
       '#to' => $to,
       '#count' => $count ?: $this->config('greeting.settings')->get('default_count'),
     ];
+  }
+
+  public function nodeGreeting(NodeInterface $node) {
+    if ($node->isPublished()) {
+      $formatted = $node->body->processed;
+
+      foreach ($node->field_tags as $tag) {
+        $terms[] = $tag->entity->label();
+      }
+
+      $message = $this->t('Everyone greet @name because @reasons!', [
+        '@name' => $node->getOwner()->label(), '@reasons' => implode(', ', $terms),
+      ]);
+      return [
+        '#title' => $node->label() . ' (' . $node->bundle() . ')',
+        '#markup' => $message . $formatted,
+      ];
+    }
+    return ['#markup' => $this->t('Not published')];
   }
 }
