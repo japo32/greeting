@@ -1,0 +1,4 @@
+services:
+  greeting.greeting_tracker:
+    class: Drupal\greeting\GreetingTracker
+    arguments: ['@state']

@@ -4,7 +4,9 @@ namespace Drupal\greeting\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Component\Utility\SafeMarkup;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Reports on greetability status
@@ -15,7 +17,28 @@ use Drupal\Component\Utility\SafeMarkup;
  *   category = @Translation("System")
  * )
  */
-class GreetingStatus extends BlockBase {
+class GreetingStatus extends BlockBase implements ContainerFactoryPluginInterface {
+  protected $greetingTracker;
+
+  /**
+   * {@inheritdoc}
+   */
+
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, GreetingTracker $greetingTracker) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->greetingTracker = $greetingTracker;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration, $plugin_id, $plugin_definition,
+      $container->get('greeting.greeting_tracker')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -33,6 +56,11 @@ class GreetingStatus extends BlockBase {
       '#title' => t('Greeting text'),
       '#default_value' => $this->configuration['greeting'],
     );
+    $form['enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Greetings enabled'),
+      '#default_value' => $this->configuration['enabled'],
+    );
     return $form;
   }
 
@@ -40,13 +68,21 @@ class GreetingStatus extends BlockBase {
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['greeting'] =  t($form_state->getValue('greeting'));
+    $this->configuration['greeting'] = t($form_state->getValue('greeting'));
+    $this->configuration['enabled'] = (bool)$form_state->getValue('enabled');
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    return ['#markup' => SafeMarkup::checkPlain($this->configuration['greeting'])];
+    $message = $this->t('No greetings.');
+    if ($this->configuration['enabled']) {
+      $message = $this->t('@to was the last person greeted.', [
+        '@to' => $this->greetingTracker->getLastRecipient()
+      ]);
+      $message .= "</br>".SafeMarkup::checkPlain($this->configuration['greeting']);
+    }
+    return ['#markup' => $message];
   }
 }
